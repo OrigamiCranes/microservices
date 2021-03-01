@@ -69,6 +69,8 @@ pipeline {
                         export DATABASE_URI=${DATABASE_URI}
                         export AUTHOR=${AUTHOR}
                         export VERSION=${VERSION}
+                        sudo chmod 666 /var/run/docker.sock
+                        sudo usermod -aG docker jenkins
                         docker stack deploy --compose-file /home/jenkins/docker-compose.yaml microservices-stack
                 '''
             }
