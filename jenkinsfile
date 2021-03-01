@@ -11,38 +11,42 @@ pipeline {
 
         stage('Test Services'){
             steps{
-                if (env.rollback == 'false'){
-                sh '''
-                # Test front end
-                cd ./front
-                python3 -m pytest --cov=app --cov-report=term-missing
+                script{
+                    if (env.rollback == 'false'){
+                    sh '''
+                    # Test front end
+                    cd ./front
+                    python3 -m pytest --cov=app --cov-report=term-missing
 
-                # Test Back-end
-                cd ../back
-                python3 -m pytest --cov=app --cov-report=term-missing
+                    # Test Back-end
+                    cd ../back
+                    python3 -m pytest --cov=app --cov-report=term-missing
 
-                # Test Stream
-                cd ../stream
-                python3 -m pytest --cov=app --cov-report=term-missing
+                    # Test Stream
+                    cd ../stream
+                    python3 -m pytest --cov=app --cov-report=term-missing
 
-                # Test Math
-                cd ../mathy
-                python3 -m pytest --cov=app --cov-report=term-missing
-                cd ..
-                '''
+                    # Test Math
+                    cd ../mathy
+                    python3 -m pytest --cov=app --cov-report=term-missing
+                    cd ..
+                    '''
+                    }
                 }
             }
         }
         stage('Build Containers and Push'){
             steps{
-                if (env.rollback == 'false'){
-                sh ''' sudo chmod 666 /var/run/docker.sock
-                sudo usermod -aG docker jenkins
-                sudo docker login -u ${DOCKERHUB_USR} -p ${DOCKERHUB_PSW}
-                docker-compose down --rmi all
-                docker-compose build
-                sudo AUTHOR=${AUTHOR} DATABASE_URI=${DATABASE_URI} VERSION=${VERSION} docker-compose push
-                '''
+                script{
+                    if (env.rollback == 'false'){
+                    sh ''' sudo chmod 666 /var/run/docker.sock
+                    sudo usermod -aG docker jenkins
+                    sudo docker login -u ${DOCKERHUB_USR} -p ${DOCKERHUB_PSW}
+                    docker-compose down --rmi all
+                    docker-compose build
+                    sudo AUTHOR=${AUTHOR} DATABASE_URI=${DATABASE_URI} VERSION=${VERSION} docker-compose push
+                    '''
+                    }
                 }
             }
         }
