@@ -1,0 +1,6 @@
+- name: Replace node labels with new labels
+  docker_node:
+    hostname: nginx
+    labels:
+      key: nginx
+    labels_state: replace

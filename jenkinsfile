@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    stages{
+
+        stage('Test Services'){
+            steps{
+                sh '''
+                # Test front end
+                cd ./front
+                pip3 install -r requirements.txt
+                pytest --cov=app --cov-report=term-missing
+
+                # Test Back-end
+                cd ..
+                cd ./back
+                pytest --cov=app --cov-report=term-missing
+
+                # Test Stream
+                cd ..
+                cd ./stream
+                pytest --cov=app --cov-report=term-missing
+
+                # Test Math
+                cd ..
+                cd ./service-4
+                pytest --cov=app --cov-report=term-missing
+                cd ..
+                '''
+            }
+        }
+        stage('Build Containers and Push'){
+            steps{
+                sh ''' sudo chmod 666 /var/run/docker.sock
+                docker-compose down --rmi all
+                docker-compose build
+                sudo docker login -u bmustafa97 -p password17
+                sudo docker-compose push
+                '''
+            }
+        }
+        stage("Configure Network"){
+            steps{
+                sh '''
+                    cd ansible
+                    chmod 666 inventory.yaml playbook.yaml
+                    ls -la
+                    ansible-playbook -i inventory.yaml playbook.yaml
+                    '''
+            }
+        }
+        stage('Deploy Swarm'){
+            steps{
+                sh '''
+                    scp -i ~/.ssh/id_rsa docker-compose.yml jenkins@manager:/home/jenkins/docker-compose.yaml
+                    ssh -i ~/.ssh/id_rsa jenkins@manager << EOF
+                    docker stack deploy --compose-file /home/jenkins/docker-compose.yaml microservices
+                    EOF
+                '''
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+- hosts: manager
+  become: true
+  roles:
+  - docker
+  - manager
+
+- hosts: workers
+  become: true
+  roles:
+  - docker
+  - role: worker
+    vars:
+      manager: manager
+
+- hosts: nginx
+  become: true
+  roles:
+  - docker
+  - webserver
