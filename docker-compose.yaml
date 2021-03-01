@@ -32,7 +32,7 @@ services:
     deploy:
       replicas: 2
 
-  math:
+  mathy:
     container_name: "mathy"
     image: ${AUTHOR}/mathy:${VERSION}
     build: ./mathy
