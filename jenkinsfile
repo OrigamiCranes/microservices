@@ -58,7 +58,6 @@ pipeline {
                     export DATABASE_URI=${DATABASE_URI}
                     export AUTHOR=${AUTHOR}
                     docker stack deploy --compose-file /home/jenkins/docker-compose.yaml microservices-stack
-                    EOF
                 '''
             }
         }
