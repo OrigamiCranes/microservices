@@ -11,7 +11,7 @@ from . import app
 
 @app.route('/')
 def index():
-    data_block = requests.get("http://localhost:5002/api").json()
+    data_block = requests.get("http://back:5002/api").json()
 
     data_frame = pandas.DataFrame.from_dict(data_block, orient='columns')
     data_frame['Date'] = data_frame['Date'].values.astype(dtype='datetime64[ms]')  # for msec format

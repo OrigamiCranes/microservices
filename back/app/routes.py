@@ -13,8 +13,8 @@ def basic():
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     settings = json.dumps(settings)
 
-    data_block = requests.get("http://localhost:5000/stream/EURUSD", json=settings, headers=headers)
-    math_block = requests.get("http://localhost:5001/math/average", json=data_block.json())
+    data_block = requests.get("http://stream:5000/stream/EURUSD", json=settings, headers=headers)
+    math_block = requests.get("http://mathy:5001/math/average", json=data_block.json())
 
     jsonMerged = {**data_block.json(), **math_block.json()}
     merged_block = json.dumps(jsonMerged)
