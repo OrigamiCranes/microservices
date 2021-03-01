@@ -1,4 +1,4 @@
-from app import app, db
+from . import app, db
 from .models import EURUSD
 from flask import render_template, request
 import random, json, pandas

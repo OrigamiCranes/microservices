@@ -1,6 +1,6 @@
 from pandas.io.json import json_normalize
 
-from app import app
+from . import app
 from flask import render_template, request
 import pandas, json
 

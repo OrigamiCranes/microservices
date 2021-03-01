@@ -1,1 +1,6 @@
 /venv/
+/front/.pytest_cache/
+/back/.pytest_cache/
+/math/.pytest_cache/
+/stream/.pytest_cache/
+/stream/app/config.py
