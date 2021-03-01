@@ -33,7 +33,7 @@ pipeline {
                 sh ''' sudo chmod 666 /var/run/docker.sock
                 docker-compose down --rmi all
                 docker-compose build
-                sudo docker login -u bmustafa97 -p password17
+                sudo docker login
                 sudo docker-compose push
                 '''
             }
