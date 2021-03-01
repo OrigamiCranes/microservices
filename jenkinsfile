@@ -33,10 +33,11 @@ pipeline {
         stage('Build Containers and Push'){
             steps{
                 sh ''' sudo chmod 666 /var/run/docker.sock
+                sudo usermod -aG docker jenkins
                 sudo docker login -u ${DOCKERHUB_USR} -p ${DOCKERHUB_PSW}
                 docker-compose down --rmi all
                 docker-compose build
-                sudo docker-compose push
+                sudo AUTHOR=${AUTHOR} DATABASE_URI=${DATABASE_URI} VERSION=${VERSION} docker-compose push
                 '''
             }
         }
