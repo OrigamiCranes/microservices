@@ -1,1 +1,1 @@
-from app import app
+from front.app import app

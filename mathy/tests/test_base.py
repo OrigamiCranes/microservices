@@ -1,12 +1,8 @@
-import unittest
-from unittest import mock
 from flask_testing import TestCase
 from flask import url_for
 import json
 
-import os
-
-from app import *
+from mathy.app import *
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -36,7 +32,16 @@ class TestBase(TestCase):
     def create_app(self):
         return app
 
-    @mock.patch('request.get_json()', side_effect=mocked_requests_get)
-    def test_access_math(self, mock_get):
-        response = self.client.get(url_for('average'))
+    def test_access_math(self):
+
+        script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
+        print(script_dir)
+        rel_path = "stream_json"
+        abs_file_path = os.path.join(script_dir, rel_path)
+
+        with open(abs_file_path, 'r') as json_data:
+            d = json.loads(json_data.read())
+            json_data.close()
+
+        response = self.client.get(url_for('average'), json=d)
         self.assertEqual(response.status_code, 200)

@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    environment{
+        DATABASE_URI = credentials("DATABASE_URI")
+        AUTHOR = credentials("AUTHOR")
+        VERSION = '1.0'
+    }
     stages{
 
         stage('Test Services'){
@@ -11,18 +16,15 @@ pipeline {
                 python3 -m pytest --cov=app --cov-report=term-missing
 
                 # Test Back-end
-                cd ..
-                cd ./back
+                cd ../back
                 python3 -m pytest --cov=app --cov-report=term-missing
 
                 # Test Stream
-                cd ..
-                cd ./stream
+                cd ../stream
                 python3 -m pytest --cov=app --cov-report=term-missing
 
                 # Test Math
-                cd ..
-                cd ./service-4
+                cd ../service-4
                 python3 -m pytest --cov=app --cov-report=term-missing
                 cd ..
                 '''
@@ -45,15 +47,18 @@ pipeline {
                     chmod 666 inventory.yaml playbook.yaml
                     ls -la
                     ansible-playbook -i inventory.yaml playbook.yaml
+                    cd ..
                     '''
             }
         }
         stage('Deploy Swarm'){
             steps{
                 sh '''
-                    scp -i ~/.ssh/id_rsa docker-compose.yml jenkins@manager:/home/jenkins/docker-compose.yaml
-                    ssh -i ~/.ssh/id_rsa jenkins@manager << EOF
-                    docker stack deploy --compose-file /home/jenkins/docker-compose.yaml microservices
+                    scp -i ~/.ssh/ansible_id_rsa docker-compose.yml jenkins@manager:/home/jenkins/docker-compose.yaml
+                    ssh -i ~/.ssh/ansible_id_rsa jenkins@manager << EOF
+                    export DATABASE_URI=${DATABASE_URI}
+                    export AUTHOR=${AUTHOR}
+                    docker stack deploy --compose-file /home/jenkins/docker-compose.yaml microservices-stack
                     EOF
                 '''
             }

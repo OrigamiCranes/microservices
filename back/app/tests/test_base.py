@@ -4,9 +4,7 @@ from flask_testing import TestCase
 from flask import url_for
 import json
 
-import os
-
-from app import *
+from back.app import *
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,9 +18,14 @@ def mocked_requests_get(*args, **kwargs):
         def json(self):
             return self.json_data
 
+    if 'stream' in args[0]:
+        rel_path = "stream_json"
+    elif 'math' in args[0]:
+        rel_path = "math_json"
+
     script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
     print(script_dir)
-    rel_path = "../../microservices-front/tests/mock_json"
+
     abs_file_path = os.path.join(script_dir, rel_path)
 
     with open(abs_file_path, 'r') as json_data:
@@ -38,5 +41,5 @@ class TestBase(TestCase):
 
     @mock.patch('requests.get', side_effect=mocked_requests_get)
     def test_access_index(self, mock_get):
-        response = self.client.get(url_for('index'))
+        response = self.client.get(url_for('basic'))
         self.assertEqual(response.status_code, 200)

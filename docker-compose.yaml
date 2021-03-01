@@ -33,8 +33,8 @@ services:
       replicas: 2
 
   math:
-    container_name: "math"
-    image: ${AUTHOR}/math:${VERSION}
+    container_name: "mathy"
+    image: ${AUTHOR}/mathy:${VERSION}
     build: ./math
     ports:
       - target: 5001
