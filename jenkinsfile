@@ -3,6 +3,7 @@ pipeline {
     environment{
         DATABASE_URI = credentials("DATABASE_URI")
         AUTHOR = credentials("AUTHOR")
+        DOCKERHUB = credentials("DockerHub")
         VERSION = '1.0'
     }
     stages{
@@ -35,7 +36,7 @@ pipeline {
                 docker-compose down --rmi all
                 docker-compose build
                 sudo docker login
-                sudo docker-compose push
+                sudo docker-compose push -u ${DOCKERHUB_USR} -p ${DOCKERHUB_PSW}
                 '''
             }
         }
