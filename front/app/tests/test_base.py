@@ -6,7 +6,8 @@ import json
 
 import os
 
-from ..app import *
+
+from front.app import app
 
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
