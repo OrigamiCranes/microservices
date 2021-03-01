@@ -35,7 +35,7 @@ services:
   math:
     container_name: "mathy"
     image: ${AUTHOR}/mathy:${VERSION}
-    build: ./math
+    build: ./mathy
     ports:
       - target: 5001
     deploy:
