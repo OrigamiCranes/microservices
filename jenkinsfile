@@ -33,7 +33,7 @@ pipeline {
         stage('Build Containers and Push'){
             steps{
                 sh ''' sudo chmod 666 /var/run/docker.sock
-                sudo docker login- u ${DOCKERHUB_USR} -p ${DOCKERHUB_PSW}
+                sudo docker login -u ${DOCKERHUB_USR} -p ${DOCKERHUB_PSW}
                 docker-compose down --rmi all
                 docker-compose build
                 sudo docker-compose push
