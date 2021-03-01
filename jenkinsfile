@@ -12,7 +12,6 @@ pipeline {
                 sh '''
                 # Test front end
                 cd ./front
-                pip3 install -r requirements.txt
                 python3 -m pytest --cov=app --cov-report=term-missing
 
                 # Test Back-end
@@ -24,7 +23,7 @@ pipeline {
                 python3 -m pytest --cov=app --cov-report=term-missing
 
                 # Test Math
-                cd ../service-4
+                cd ../mathy
                 python3 -m pytest --cov=app --cov-report=term-missing
                 cd ..
                 '''
