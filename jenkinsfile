@@ -5,11 +5,13 @@ pipeline {
         AUTHOR = credentials("AUTHOR")
         DOCKERHUB = credentials("DockerHub")
         VERSION = '1.0'
+        rollback = 'true'
     }
     stages{
 
         stage('Test Services'){
             steps{
+                if (env.rollback == 'false'){
                 sh '''
                 # Test front end
                 cd ./front
@@ -28,10 +30,12 @@ pipeline {
                 python3 -m pytest --cov=app --cov-report=term-missing
                 cd ..
                 '''
+                }
             }
         }
         stage('Build Containers and Push'){
             steps{
+                if (env.rollback == 'false'){
                 sh ''' sudo chmod 666 /var/run/docker.sock
                 sudo usermod -aG docker jenkins
                 sudo docker login -u ${DOCKERHUB_USR} -p ${DOCKERHUB_PSW}
@@ -39,15 +43,16 @@ pipeline {
                 docker-compose build
                 sudo AUTHOR=${AUTHOR} DATABASE_URI=${DATABASE_URI} VERSION=${VERSION} docker-compose push
                 '''
+                }
             }
         }
         stage("Configure Network"){
             steps{
                 sh '''
                     cd ansible
-                    chmod 666 inventory.yaml playbook.yaml
+                    chmod 666 inventory playbook.yaml
                     ls -la
-                    ansible-playbook -i inventory.yaml playbook.yaml
+                    ansible-playbook -i inventory playbook.yaml
                     cd ..
                     '''
             }
@@ -55,11 +60,12 @@ pipeline {
         stage('Deploy Swarm'){
             steps{
                 sh '''
-                    scp -i ~/.ssh/ansible_id_rsa docker-compose.yml jenkins@manager:/home/jenkins/docker-compose.yaml
+                    scp -i ~/.ssh/ansible_id_rsa docker-compose.yaml jenkins@manager:/home/jenkins/docker-compose.yaml
                     ssh -i ~/.ssh/ansible_id_rsa jenkins@manager << EOF
-                    export DATABASE_URI=${DATABASE_URI}
-                    export AUTHOR=${AUTHOR}
-                    docker stack deploy --compose-file /home/jenkins/docker-compose.yaml microservices-stack
+                        export DATABASE_URI=${DATABASE_URI}
+                        export AUTHOR=${AUTHOR}
+                        export VERSION=${VERSION}
+                        docker stack deploy --compose-file /home/jenkins/docker-compose.yaml microservices-stack
                 '''
             }
         }
