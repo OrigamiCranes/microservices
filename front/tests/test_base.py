@@ -6,7 +6,8 @@ import json
 
 import os
 
-from app import *
+from ..app import *
+
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,7 +23,7 @@ def mocked_requests_get(*args, **kwargs):
 
     script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
     print(script_dir)
-    rel_path = "../../microservices-front/tests/mock_json"
+    rel_path = "mock_json"
     abs_file_path = os.path.join(script_dir, rel_path)
 
     with open(abs_file_path, 'r') as json_data:
