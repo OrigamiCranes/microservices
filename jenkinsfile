@@ -5,7 +5,7 @@ pipeline {
         AUTHOR = credentials("AUTHOR")
         DOCKERHUB = credentials("DockerHub")
         VERSION = '1.0'
-        rollback = 'true'
+        rollback = 'false'
     }
     stages{
 
