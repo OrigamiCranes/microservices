@@ -5,8 +5,7 @@ services:
     container_name: "front"
     image: ${AUTHOR}/front:${VERSION}
     ports:
-      - target: 5003
-        protocol: tcp
+      - 5003:5003
     environment:
       DATABASE_URI: ${DATABASE_URI}
     deploy:
