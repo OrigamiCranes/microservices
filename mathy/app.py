@@ -13,7 +13,7 @@ def average():
 
     data_frame = pandas.DataFrame.from_dict(data_block, orient='columns')
 
-    data_frame['MA-5'] = data_frame.rolling(window=5)['Close'].mean()
+    data_frame['MA-5'] = data_frame.rolling(window=10)['Close'].mean()
 
     math_block = data_frame['MA-5'].to_json(orient='columns')
     math_block = json.loads(math_block)

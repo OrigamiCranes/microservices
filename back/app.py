@@ -5,7 +5,7 @@ import pandas
 
 app = Flask(__name__)
 
-block_size = 100
+block_size = 200
 
 
 @app.route('/api', methods=['GET'])
