@@ -6,7 +6,6 @@ services:
     image: ${AUTHOR}/front:${VERSION}
     ports:
       - target: 5003
-        published: 80
         protocol: tcp
     environment:
       DATABASE_URI: ${DATABASE_URI}
