@@ -1,12 +1,8 @@
-import unittest
-from unittest import mock
 from flask_testing import TestCase
 from flask import url_for
 import json
 
-import os
-
-from stream.app import *
+from ..app import app
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 

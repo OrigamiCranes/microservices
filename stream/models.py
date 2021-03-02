@@ -1,4 +1,4 @@
-from . import db
+from stream.app import db
 
 
 class EURUSD(db.Model):

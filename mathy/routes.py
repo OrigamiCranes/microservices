@@ -1,4 +1,4 @@
-from . import app
+from mathy.app import app
 from flask import request
 import pandas, json
 

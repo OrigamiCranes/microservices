@@ -1,6 +1,6 @@
 import json
 import requests
-from . import app
+from back.app import app
 import pandas
 
 block_size = 100
